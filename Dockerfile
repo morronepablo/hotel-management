@@ -17,20 +17,26 @@ RUN apt-get update && apt-get install -y \
 # Instalar Composer
 COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
 
+# Crear un usuario no privilegiado
+RUN useradd -m -s /bin/bash appuser
+USER appuser
+WORKDIR /home/appuser
+
 # Copiar el código del proyecto
-COPY . /var/www/html
+COPY --chown=appuser:appuser . /var/www/html
 
 # Establecer el directorio de trabajo
 WORKDIR /var/www/html
 
-# Instalar dependencias de Composer
+# Instalar dependencias de Composer como appuser
 RUN composer install --no-dev --optimize-autoloader --ignore-platform-reqs
 
-# Configurar permisos
+# Cambiar de nuevo a root para configurar permisos
+USER root
 RUN chown -R www-data:www-data /var/www/html/storage /var/www/html/bootstrap/cache
 RUN chmod -R 775 /var/www/html/storage /var/www/html/bootstrap/cache
 
-# Habilitar el módulo de reescritura de Apache (necesario para Laravel)
+# Habilitar el módulo de reescritura de Apache
 RUN a2enmod rewrite
 
 # Configurar Apache para usar el directorio public de Laravel
