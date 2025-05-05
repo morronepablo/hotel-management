@@ -28,8 +28,8 @@ COPY --chown=appuser:appuser . /var/www/html
 # Establecer el directorio de trabajo
 WORKDIR /var/www/html
 
-# Instalar dependencias de Composer como appuser
-RUN composer install --no-dev --optimize-autoloader --ignore-platform-reqs
+# Instalar dependencias de Composer como appuser sin ejecutar scripts que requieren BD
+RUN composer install --no-dev --optimize-autoloader --ignore-platform-reqs --no-scripts
 
 # Cambiar de nuevo a root para configurar permisos
 USER root
