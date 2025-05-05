@@ -23,6 +23,7 @@ class CreatePermissionTables extends Migration
         });
 
         Schema::create('model_has_permissions', function (Blueprint $table) {
+            $table->id(); // Agrega un campo `id` como clave primaria auto-incremental
             $table->unsignedBigInteger('permission_id');
             $table->string('model_type');
             $table->unsignedBigInteger('model_id');
@@ -31,6 +32,7 @@ class CreatePermissionTables extends Migration
         });
 
         Schema::create('model_has_roles', function (Blueprint $table) {
+            $table->id(); // Agrega un campo `id` como clave primaria auto-incremental
             $table->unsignedBigInteger('role_id');
             $table->string('model_type');
             $table->unsignedBigInteger('model_id');
