@@ -28,6 +28,9 @@ COPY --chown=appuser:appuser . /var/www/html
 # Establecer el directorio de trabajo
 WORKDIR /var/www/html
 
+# Generar la clave de la aplicación
+RUN php artisan key:generate --force
+
 # Instalar dependencias de Composer como appuser
 RUN composer install --no-dev --optimize-autoloader --ignore-platform-reqs
 
